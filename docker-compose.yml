@@ -25,7 +25,7 @@ services:
     container_name: web
     volumes:
       - ./src/:/var/www
-      - ./config/apache2:/etc/apache2/sites-enabled/
+      - ./configs/apache2:/etc/apache2/sites-enabled/
       - ./logs/apache2:/var/log/apache2
     ports:
       - "80:80"
