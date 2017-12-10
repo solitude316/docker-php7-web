@@ -1,0 +1,37 @@
+version: '3.3'
+
+services: 
+  db:
+    image: mysql:latest
+    ports: 
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports: 
+      - "6380:6380"
+    configs:
+      - source: my_config
+        target: redis_config
+  web:
+    build: ./web
+    image: php7web:latest
+    hostname: web_dev
+    container_name: web
+    volumes:
+      - ./src/:/var/www
+      - ./config/apache2:/etc/apache2/sites-enabled/
+      - ./logs/apache2:/var/log/apache2
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - db
+      - redis
+configs:
+  redis_config:
+    file: ./confgs/redis_config.txt
