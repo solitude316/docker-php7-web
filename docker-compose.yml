@@ -3,6 +3,7 @@ version: '3.3'
 services: 
   db:
     image: mysql:latest
+    container_name: mysql
     ports: 
       - "3306:3306"
     volumes:
