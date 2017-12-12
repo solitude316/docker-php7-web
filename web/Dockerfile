@@ -2,9 +2,9 @@ FROM ubuntu:latest
 
 RUN apt-get update \
     && apt-get install -y wget apt-utils locales libreadline-dev ssl-cert imagemagick libapache2-mod-php7.0 \
-    composer curl \
-    && locale-gen zh_TW.UTF-8 \
-    && export LANG=zh_TW.UTF-8
+    composer curl
+
+#RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8
 
 RUN apt-get -y install apache2 \
     php php7.0-cli php7.0-curl php7.0-gd php7.0-pgsql php7.0-mbstring php-mongodb php7.0-json \
