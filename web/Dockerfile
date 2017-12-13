@@ -2,7 +2,7 @@ FROM ubuntu:latest
 
 RUN apt-get update \
     && apt-get install -y wget apt-utils locales libreadline-dev ssl-cert imagemagick libapache2-mod-php7.0 \
-    composer curl
+    composer curl nodejs npm
 
 #RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8
 
@@ -28,7 +28,7 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
 
 RUN mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR
 
-EXPOSE 80 443
+EXPOSE 80 443 8000
 #VOLUME ["/var/www/" "/var/log/apache2" "/etc/apache2/sites-enabled"]
 ENTRYPOINT [ "/usr/sbin/apache2" ]
 CMD ["-D", "FOREGROUND"]
