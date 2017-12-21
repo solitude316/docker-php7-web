@@ -14,9 +14,6 @@ RUN a2enmod ssl && a2ensite default-ssl && a2enmod rewrite
 	
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
-#COPY config/www.piapp.crt /etc/ssl/certs/
-#COPY config/www.piapp.key /etc/ssl/private/
-
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
 ENV APACHE_LOG_DIR /var/log/apache2
