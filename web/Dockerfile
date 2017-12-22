@@ -1,14 +1,18 @@
 FROM ubuntu:latest
 
-RUN apt-get update \
-    && apt-get install -y wget apt-utils locales libreadline-dev ssl-cert imagemagick libapache2-mod-php7.0 \
-    composer curl nodejs npm
+RUN apt-get update && \
+    apt-get install -y wget apt-utils locales libreadline-dev ssl-cert imagemagick \
+    apache2 composer curl nodejs npm
 
-#RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8
+RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8
 
-RUN apt-get -y install apache2 \
-    php php7.0-cli php7.0-curl php7.0-gd php7.0-pgsql php7.0-mbstring php-mongodb php7.0-json \
-    php7.0-mcrypt php7.0-mysql php7.0-opcache php7.0-zip php-redis php-memcached php-xml php-imagick
+RUN apt-get install -y python-software-properties software-properties-common && \
+    add-apt-repository ppa:ondrej/php && \
+    apt-get update
+
+RUN apt-get -y install libapache2-mod-php7.2 \
+    php7.2 php7.2-cli php7.2-curl php7.2-gd php7.2-pgsql php7.2-mbstring php-mongodb php7.2-json \
+    php7.1-mcrypt php7.2-mysql php7.2-opcache php7.2-zip php-redis php-memcached php7.2-xml php-imagick
 
 RUN a2enmod ssl && a2ensite default-ssl && a2enmod rewrite
 	
