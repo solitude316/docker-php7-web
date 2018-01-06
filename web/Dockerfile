@@ -2,12 +2,12 @@ FROM ubuntu:latest
 
 RUN apt-get update && \
     apt-get install -y wget apt-utils locales libreadline-dev ssl-cert imagemagick \
-    apache2 composer curl nodejs npm
+    apache2 composer curl npm language-pack-en-base software-properties-common \
+    python3-software-properties
 
-RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8
+RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8 && export LC_ALL=zh_TW.UTF-8
 
-RUN apt-get install -y python-software-properties software-properties-common && \
-    add-apt-repository ppa:ondrej/php && \
+RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
     apt-get update
 
 RUN apt-get -y install libapache2-mod-php7.2 \
@@ -17,6 +17,11 @@ RUN apt-get -y install libapache2-mod-php7.2 \
 RUN a2enmod ssl && a2ensite default-ssl && a2enmod rewrite
 	
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
+
+# nodeJS and webpack
+RUN curl -sL https://deb.nodesource.com/setup_9.x | bash -
+RUN apt-get install -y nodejs
+RUN npm install --save-dev webpack
 
 ENV APACHE_RUN_USER www-data
 ENV APACHE_RUN_GROUP www-data
@@ -29,7 +34,6 @@ RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
 
 RUN mkdir -p $APACHE_RUN_DIR $APACHE_LOCK_DIR $APACHE_LOG_DIR
 
-EXPOSE 80 443 8000
+EXPOSE 80 443 8000 8080
 #VOLUME ["/var/www/" "/var/log/apache2" "/etc/apache2/sites-enabled"]
-ENTRYPOINT [ "/usr/sbin/apache2" ]
-CMD ["-D", "FOREGROUND"]
+ENTRYPOINT [ "/usr/sbin/apache2", "-D", "FOREGROUND" ]
