@@ -13,11 +13,18 @@ services:
   redis:
     image: redis:latest
     container_name: redis
+    volumes:
+      - ./data/redis:/data
     ports: 
       - "6380:6380"
-    configs:
-      - source: my_config
-        target: redis_config
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
   web:
     build: ./web
     image: php7web:latest
@@ -25,14 +32,23 @@ services:
     container_name: web
     volumes:
       - ./src/:/var/www
-      - ./configs/apache2:/etc/apache2/sites-enabled/
+      - ./configs/apache2:/etc/apache2/sites-enabled
       - ./logs/apache2:/var/log/apache2
-    ports:
-      - "80:80"
-      - "443:443"
     depends_on:
       - db
       - redis
-configs:
-  redis_config:
-    file: ./confgs/redis_config.txt
+    environment:
+      - VIRTUAL_HOST=host1.local
+  web2: 
+    image: php7web:latest
+    hostname: web_dev2
+    container_name: web2
+    volumes:
+      - ./src2:/var/www
+      - ./configs/web2/apache2:/etc/apache2/sites-enabled
+      - ./logs/web2/apache2:/var/log/apache2
+    depends_on:
+      - db
+      - redis
+    environment:
+      - VIRTUAL_HOST=host2.local
