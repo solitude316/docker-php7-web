@@ -24,28 +24,31 @@ services:
       - "80:80"
       - "443:443"
     volumes:
+      - ./configs/nginx-proxy/certs:/etc/nginx/certs
+      - ./configs/nginx-proxy/dhparam:/etc/nginx/dhparam
       - /var/run/docker.sock:/tmp/docker.sock:ro
   web:
-    build: ./web
+    build: ./build/web
     image: php7web:latest
     hostname: web_dev
     container_name: web
     volumes:
-      - ./src/:/var/www
-      - ./configs/apache2:/etc/apache2/sites-enabled
-      - ./logs/apache2:/var/log/apache2
+      - ./src/web:/var/www
+      - ./configs/web/sites-enabled:/etc/apache2/sites-enabled
+      - ./logs/web/apache2:/var/log/apache2
     depends_on:
       - db
       - redis
     environment:
       - VIRTUAL_HOST=host1.local
   web2: 
+    build: ./build/web
     image: php7web:latest
     hostname: web_dev2
     container_name: web2
     volumes:
-      - ./src2:/var/www
-      - ./configs/web2/apache2:/etc/apache2/sites-enabled
+      - ./src/web2:/var/www
+      - ./configs/web2/sites-enabled:/etc/apache2/sites-enabled
       - ./logs/web2/apache2:/var/log/apache2
     depends_on:
       - db
