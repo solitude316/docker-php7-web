@@ -1,14 +1,16 @@
 FROM ubuntu:latest
 
+ENV DEBIAN_FRONTEND noninteractive
+
 RUN apt-get update && \
     apt-get install -y wget apt-utils locales libreadline-dev ssl-cert imagemagick \
     apache2 composer curl npm language-pack-en-base software-properties-common \
     python3-software-properties
 
-RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8 && export LC_ALL=zh_TW.UTF-8
+RUN apt-get install tzdata
+RUN ln -fs /usr/share/zoneinfo/Asia/Taipei /etc/localtime
 
-RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && \
-    apt-get update
+RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8 && export LC_ALL=zh_TW.UTF-8
 
 RUN apt-get -y install libapache2-mod-php7.2 \
     php7.2 php7.2-cli php7.2-curl php7.2-gd php7.2-pgsql php7.2-mbstring php-mongodb php7.2-json \
