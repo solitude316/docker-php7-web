@@ -14,7 +14,7 @@ RUN locale-gen zh_TW.UTF-8 && export LANG=zh_TW.UTF-8 && export LC_ALL=zh_TW.UTF
 
 RUN apt-get -y install libapache2-mod-php7.2 \
     php7.2 php7.2-cli php7.2-curl php7.2-gd php7.2-pgsql php7.2-mbstring php-mongodb php7.2-json \
-    php7.1-mcrypt php7.2-mysql php7.2-opcache php7.2-zip php-redis php-memcached php7.2-xml php-imagick
+    php7.2-mysql php7.2-opcache php7.2-zip php-redis php-memcached php7.2-xml php-imagick
 
 RUN a2enmod ssl && a2ensite default-ssl && a2enmod rewrite
 	
